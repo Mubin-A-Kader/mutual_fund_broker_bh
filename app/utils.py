@@ -34,7 +34,7 @@ def verify_token(token: str):
         )
 
 class CustomPagination:
-    def __init__(self, items: List[Dict[str, Any]], page: int = 1, page_size: int = 20):
+    def __init__(self, items: List[Dict[str, Any]], page: int = 1, page_size: int = 5):
         self.items = items
         self.page = page
         self.page_size = page_size
@@ -58,7 +58,7 @@ class CustomPagination:
 
 def fetch_mutual_fund_data(rta_agent_code: str = "CAMS", page: int = 1,json=True):
     url = "https://latest-mutual-fund-nav.p.rapidapi.com/master"
-    querystring = {"RTA_Agent_Code": rta_agent_code}
+    querystring = {"scheme_type":"Open","RTA_Agent_Code": rta_agent_code}
     headers = {
         "X-RapidAPI-Key": RAPIDAPI_KEY,
         "X-RapidAPI-Host": RAPIDAPI_HOST

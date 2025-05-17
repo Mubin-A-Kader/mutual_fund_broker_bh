@@ -15,8 +15,8 @@ async def update_portfolio_values():
             # Find matching fund in the API response
             fund_info = next((fund for fund in fund_data if fund["Scheme_Name"] == portfolio.fund_name), None)
             if fund_info:
-                portfolio.current_price = float(fund_info.get("NAV", 0))
-                portfolio.last_updated = datetime.utcnow()
+                portfolio.current_price = float(fund_info.get("Minimum_Purchase_Amount", 0))
+                portfolio.last_updated = datetime.now()
         
         db.commit()
     finally:
