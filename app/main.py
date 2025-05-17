@@ -24,7 +24,7 @@ def read_root():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500"],  # Add your frontend URL here
+    allow_origins=["http://127.0.0.1:5500", "http://127.0.0.1:8080", "http://localhost:8080","http://localhost:8081"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
