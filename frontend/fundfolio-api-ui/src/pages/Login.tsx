@@ -13,7 +13,6 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -21,18 +20,18 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/auth/login', {
+      const response = await axios.post('http://0.0.0.0:8000/auth/login', {
         email,
         password
       });
       console.log("Raw Login response:", response);
-      
       // Store the access token and user info directly from the response
       if (response.data && response.data.status === "success") {
         const { access_token, token_type } = response.data.data;
         localStorage.setItem('access_token', access_token);
         localStorage.setItem('token_type', token_type);
         
+        navigate("/portfolio");
         // Store user information
         const userInfo = {
           email: email
@@ -40,7 +39,8 @@ const Login: React.FC = () => {
         localStorage.setItem('user', JSON.stringify(userInfo));
         
         console.log("Token stored successfully");
-        navigate("/portfolio");
+        
+
       } else {
         console.error("Login failed:", response);
       }

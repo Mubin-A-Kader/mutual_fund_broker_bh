@@ -21,7 +21,6 @@ interface PortfolioData {
 }
 
 const Portfolio: React.FC = () => {
-  const { token } = useAuth();
   const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null); // Optional: show errors
@@ -29,28 +28,30 @@ const Portfolio: React.FC = () => {
 
   useEffect(() => {
     const fetchPortfolio = async () => {
-      if (!token) return;
+      if (!localStorage.getItem("access_token")) return;
 
       try {
+        debugger;
         setIsLoading(true);
         setError(null);
-
-        const response = await portfolioAPI.getPortfolio(token);
+        const response = await portfolioAPI.getPortfolio(localStorage.getItem("access_token"));
         console.log("Response:", response);
 
         // Assuming the API response directly returns the portfolio data
         setPortfolioData(response);
       } catch (err: any) {
+        debugger;
         console.error("Error fetching portfolio:", err);
         setError("Failed to load portfolio. Please try again later.");
         setPortfolioData(null);
       } finally {
+        debugger;
         setIsLoading(false);
       }
     };
 
     fetchPortfolio();
-  }, [token]);
+  }, [!localStorage.getItem("access_token")]);
 
   const getTotalValue = () => {
     return portfolioData?.portfolios.reduce((total, item) => total + (item.current_value || 0), 0) || 0;

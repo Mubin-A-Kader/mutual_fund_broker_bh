@@ -21,7 +21,6 @@ const AddPortfolio: React.FC = () => {
   useEffect(() => {
     // Check for token availability from localStorage
     const storedToken = localStorage.getItem("access_token");
-    debugger;
     console.log(storedToken);
     if (!storedToken) {
       toast.error("Please login to continue");

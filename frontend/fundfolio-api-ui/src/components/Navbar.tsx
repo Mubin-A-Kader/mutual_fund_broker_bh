@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
             <span className="text-xl font-bold text-primary">FundFolio</span>
           </Link>
           
-          {isAuthenticated && (
+          {localStorage.getItem("access_token") && (
             <nav className="hidden items-center gap-6 text-sm md:flex">
 
               <Link to="/funds" className="font-medium transition-colors hover:text-primary">
@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
         </div>
         
         <div className="flex items-center gap-4">
-          {isAuthenticated ? (
+          {localStorage.getItem("access_token") ? (
             <div className="flex items-center gap-4">
               <Button variant="ghost" size="icon" onClick={() => navigate("/profile")}>
                 <User className="h-5 w-5" />

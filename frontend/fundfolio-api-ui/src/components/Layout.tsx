@@ -22,7 +22,7 @@ const Layout: React.FC<LayoutProps> = ({ children, requireAuth = false }) => {
   }
 
   // Redirect to login if authentication is required but user is not authenticated
-  if (requireAuth && !isAuthenticated) {
+  if (requireAuth && !localStorage.getItem('access_token')) {
     return <Navigate to="/login" replace />;
   }
 

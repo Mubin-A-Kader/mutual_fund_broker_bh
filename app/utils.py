@@ -63,6 +63,7 @@ def fetch_mutual_fund_data(rta_agent_code: str = "CAMS", page: int = 1,json=True
         "X-RapidAPI-Key": RAPIDAPI_KEY,
         "X-RapidAPI-Host": RAPIDAPI_HOST
     }
+    
     try:
         curren_dir = os.getcwd()
         with open(f'{curren_dir}/tests/dummy.json', 'r') as f:

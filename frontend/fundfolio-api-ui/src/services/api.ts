@@ -2,7 +2,7 @@
 import { toast } from "sonner";
 
 // Set the base URL for API requests
-const API_URL = "http://localhost:8000";
+const API_URL = "http://0.0.0.0:8000";
 
 // Types
 export interface UserCreate {
