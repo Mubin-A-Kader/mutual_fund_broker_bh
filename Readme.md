@@ -42,7 +42,7 @@ docker-compose up --build
 ![Register](https://github.com/Mubin-A-Kader/mutual_fund_broker_bh/raw/main/screenshots/register.png)
 
 ### Browse Funds
-![Browse Funds](https://github.com/Mubin-A-Kader/mutual_fund_broker_bh/raw/main/screenshots/browse_funds.png)
+![Browse Funds](https://github.com/Mubin-A-Kader/mutual_fund_broker_bh/raw/main/screenshots/browse_fund.png)
 
 ### Select Fund
 ![Select Fund](https://github.com/Mubin-A-Kader/mutual_fund_broker_bh/raw/main/screenshots/select_fund.png)
