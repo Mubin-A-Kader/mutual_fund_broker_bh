@@ -6,7 +6,8 @@ from sqlalchemy import pool
 from alembic import context
 import os
 import sys
-
+from dotenv import load_dotenv
+load_dotenv()
 # Add the project root directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
@@ -16,7 +17,7 @@ from app.models import *  # Import all your models here
 
 # this is the Alembic Config object
 config = context.config
-config.set_main_option('sqlalchemy.url', os.getenv("DATABASE_URL"))
+config.set_main_option('sqlalchemy.url', os.getenv("DATABASE_URL", ""))
 
 # Interpret the config file for Python logging
 if config.config_file_name is not None:
