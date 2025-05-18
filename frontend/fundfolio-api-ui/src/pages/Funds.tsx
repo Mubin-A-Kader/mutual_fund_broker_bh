@@ -11,8 +11,8 @@ import DataTable from 'react-data-table-component';
 
 interface FundSchema {
   Scheme_Name: string;
+  AMC_Code: string;
   Fund_House: string;
-  Nav: number;
   Minimum_Purchase_Amount: number;
 }
 
@@ -22,7 +22,7 @@ const Funds: React.FC = () => {
   const [funds, setFunds] = useState<FundSchema[]>([]);
   const [page, setPage] = useState(1);
   const [totalRows, setTotalRows] = useState(0);
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ const Funds: React.FC = () => {
     const fetchFundHouses = async () => {
       setIsLoading(true);
       try {
-        const response = await fundsAPI.getSchemes("CAMS");
+        const response = await fundsAPI.getSchemes("CAMS",1,localStorage.getItem("access_token"));
         console.log(response,"iiiiii");
         setFundHouses(response.data);
         setTotalRows(response.pagination.total_items);
@@ -56,13 +56,23 @@ const Funds: React.FC = () => {
       
       setIsLoading(true);
       try {
-        const response = await fundsAPI.getSchemes(selectedFundHouse, page);
-        setFunds(response.data);
-        // Update pagination state based on response
-        setTotalRows(response.pagination.total_items);
-        setPage(response.pagination.current_page);
+        const accessToken = localStorage.getItem("access_token");
+        const response = await fundsAPI.getSchemes(selectedFundHouse, page, accessToken);
+        if (response && response.data) {
+          setFunds(response.data);
+          // Update pagination state based on response
+          if (response.pagination) {
+            setTotalRows(response.pagination.total_items || 0);
+            setPage(response.pagination.current_page || 1);
+          }
+        } else {
+          setFunds([]);
+          setTotalRows(0);
+        }
       } catch (error) {
         console.error("Error fetching funds:", error);
+        setFunds([]);
+        setTotalRows(0);
       } finally {
         setIsLoading(false);
       }
@@ -191,11 +201,7 @@ const Funds: React.FC = () => {
                 <CardContent className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Fund House:</span>
-                    <span className="font-medium">{fund.Fund_House || 'N/A'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">NAV:</span>
-                    <span className="font-medium">₹{(fund.Nav || 0).toFixed(2)}</span>
+                    <span className="font-medium">{fund.AMC_Code || 'N/A'}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Minimum Amount:</span>

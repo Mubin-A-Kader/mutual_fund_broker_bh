@@ -105,10 +105,15 @@ export const authAPI = {
     apiCall<Token>("/auth/login", "POST", userData),
 };
 
-// Funds API functions
 export const fundsAPI = {
-  getSchemes: (fundHouse: string, page: number = 1) => 
-    apiCall<FundSchema[]>(`/funds/schemes/${fundHouse}`, "GET", undefined, undefined, { page }),
+  getSchemes: (fundHouse: string, page: number = 1, token?: string) => 
+    apiCall<FundSchema[]>(
+      `/funds/schemes/${fundHouse}`, 
+      "GET", 
+      undefined, 
+      token, 
+      { page }
+    ),
 };
 
 // Portfolio API functions

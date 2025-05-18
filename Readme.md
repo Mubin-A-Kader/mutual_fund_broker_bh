@@ -32,5 +32,10 @@ docker-compose up --build
     - docker-compose up --build -d:
         - backend and frontend containers will be up in detached mode.
 
+![browse_funds](screenshots/browse_funds.png)
+![home](screenshots/home.png)
+![portfolio](screenshots/portfolio.png)
+![register](screenshots/register.png)
+![select_fund](screenshots/select_fund.png)
 
 
