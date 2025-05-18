@@ -31,11 +31,25 @@ docker-compose up --build
     - Note: we havent created seperate ontiner for database. all are running inside backend container. and on the destruction of backend container, database will be destroyed.
     - docker-compose up --build -d:
         - backend and frontend containers will be up in detached mode.
+```
 
-![browse_funds](screenshots/browse_funds.png)
-![home](screenshots/home.png)
-![portfolio](screenshots/portfolio.png)
-![register](screenshots/register.png)
-![select_fund](screenshots/select_fund.png)
+## App Screenshots
+
+### Home Screen
+![Home](https://github.com/Mubin-A-Kader/mutual_fund_broker_bh/raw/main/screenshots/home.png)
+
+### Register Screen
+![Register](https://github.com/Mubin-A-Kader/mutual_fund_broker_bh/raw/main/screenshots/register.png)
+
+### Browse Funds
+![Browse Funds](https://github.com/Mubin-A-Kader/mutual_fund_broker_bh/raw/main/screenshots/browse_funds.png)
+
+### Select Fund
+![Select Fund](https://github.com/Mubin-A-Kader/mutual_fund_broker_bh/raw/main/screenshots/select_fund.png)
+
+### Portfolio Screen
+![Portfolio](https://github.com/Mubin-A-Kader/mutual_fund_broker_bh/raw/main/screenshots/portfolio.png)
+
+
 
 
