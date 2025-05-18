@@ -15,3 +15,5 @@ Before running this project, make sure you have the following installed:
 docker-compose up --build
     - This will spin up backend, frontend containers and take care of database migrations inside backend container.
     - Note: we havent created seperate ontiner for database. all are running inside backend container. and on the destruction of backend container, database will be destroyed.
+    - docker-compose up --build -d:
+        - backend and frontend containers will be up in detached mode.

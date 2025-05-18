@@ -56,8 +56,8 @@ class CustomPagination:
             "has_previous": self.page > 1
         }
 
-def fetch_mutual_fund_data(rta_agent_code: str = "CAMS", page: int = 1,json=True):
-    url = "https://latest-mutual-fund-nav.p.rapidapi.com/master"
+def fetch_mutual_fund_data(rta_agent_code: str = "CAMS", page: int = 1, json=True):
+    url = f'https://{RAPIDAPI_HOST}/master'
     querystring = {"scheme_type":"Open","RTA_Agent_Code": rta_agent_code}
     headers = {
         "X-RapidAPI-Key": RAPIDAPI_KEY,
@@ -65,13 +65,21 @@ def fetch_mutual_fund_data(rta_agent_code: str = "CAMS", page: int = 1,json=True
     }
     
     try:
-        curren_dir = os.getcwd()
-        with open(f'{curren_dir}/tests/dummy.json', 'r') as f:
-            response = requests.Response()
-            response._content = f.read().encode('utf-8')
-            response.status_code = 200
+        # First try to hit the actual API
+        response = requests.get(url, headers=headers, params=querystring)
+        
+        # If API call fails, fallback to default data
+        if response.status_code != 200:
+            print("API quota exceeded, falling back to default data")
+            curren_dir = os.getcwd()
+            with open(f'{curren_dir}/tests/dummy.json', 'r') as f:
+                print("API response taking from cache or json file")
+                response = requests.Response()
+                response._content = f.read().encode('utf-8')
+                response.status_code = 200
         
         if response.status_code == 200:
+            print("API call successful")
             data = response.json()
             if not json:
                 return data
