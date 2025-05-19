@@ -357,24 +357,60 @@ const Funds: React.FC = () => {
         {!isLoading && funds.length > 0 && (
           <div className="flex flex-col items-center gap-4">
             <div className="text-sm text-muted-foreground">
-              Page {page} of {totalRows ? Math.ceil(totalRows / perPage) : 1} | 
               Total Items: {totalRows} | 
               Items per page: {perPage}
             </div>
-            <div className="flex justify-center gap-2">
+            <div className="flex flex-wrap justify-center gap-2">
               <Button
                 variant="outline"
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                onClick={() => handlePageChange(1)}
+                disabled={page === 1}
+              >
+                First
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handlePageChange(page - 1)}
                 disabled={page === 1}
               >
                 Previous
               </Button>
+              {Array.from({ length: Math.ceil(totalRows / perPage) }, (_, i) => {
+                const pageNumber = i + 1;
+                // Show current page, first page, last page, and pages around current
+                const shouldShow = 
+                  pageNumber === 1 || 
+                  pageNumber === Math.ceil(totalRows / perPage) ||
+                  Math.abs(pageNumber - page) <= 2;
+
+                if (!shouldShow && Math.abs(pageNumber - page) === 3) {
+                  return <span key={pageNumber}>...</span>;
+                }
+
+                return shouldShow ? (
+                  <Button
+                    key={pageNumber}
+                    variant={page === pageNumber ? "default" : "outline"}
+                    onClick={() => handlePageChange(pageNumber)}
+                    className="min-w-[40px]"
+                  >
+                    {pageNumber}
+                  </Button>
+                ) : null;
+              })}
               <Button
                 variant="outline"
-                onClick={() => setPage((p) => p + 1)}
+                onClick={() => handlePageChange(page + 1)}
                 disabled={page >= Math.ceil(totalRows / perPage)}
               >
                 Next
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handlePageChange(Math.ceil(totalRows / perPage))}
+                disabled={page >= Math.ceil(totalRows / perPage)}
+              >
+                Last
               </Button>
             </div>
           </div>
