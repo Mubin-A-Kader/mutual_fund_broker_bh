@@ -13,7 +13,7 @@ interface FundSchema {
   Scheme_Name: string;
   AMC_Code: string;
   Fund_House: string;
-  Minimum_Purchase_Amount: number;
+  NAV: number;
 }
 
 const Funds: React.FC = () => {
@@ -108,9 +108,9 @@ const Funds: React.FC = () => {
     },
     {
       name: 'Minimum Amount',
-      selector: (row: FundSchema) => row.Minimum_Purchase_Amount || 0,
+      selector: (row: FundSchema) => row.NAV || 0,
       sortable: true,
-      format: (row: FundSchema) => `₹${(row.Minimum_Purchase_Amount || 0).toLocaleString('en-IN')}`,
+      format: (row: FundSchema) => `₹${(row.NAV || 0).toLocaleString('en-IN')}`,
     },
   ];
 
@@ -205,7 +205,7 @@ const Funds: React.FC = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Minimum Amount:</span>
-                    <span className="font-medium">₹{(fund.Minimum_Purchase_Amount || 0).toLocaleString('en-IN')}</span>
+                    <span className="font-medium">₹{(fund.NAV || 0).toLocaleString('en-IN')}</span>
                   </div>
                 </CardContent>
                 <CardFooter>

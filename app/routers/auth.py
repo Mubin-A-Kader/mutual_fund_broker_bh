@@ -10,14 +10,14 @@ from fastapi.responses import JSONResponse
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/register", response_model=UserOut)
-def register(user: UserCreate, db: Session = Depends(get_db)):
-    if get_user_by_email(db, user.email):
+async def register(user: UserCreate, db: Session = Depends(get_db)):
+    if await get_user_by_email(db, user.email):
         raise HTTPException(status_code=400, detail="Email already registered")
-    return create_user(db, user)
+    return await create_user(db, user)
 
 @router.post("/login", response_model=Token)
-def login(user: UserCreate, db: Session = Depends(get_db)):
-    db_user = get_user_by_email(db, user.email)
+async def login(user: UserCreate, db: Session = Depends(get_db)):
+    db_user = await get_user_by_email(db, user.email)
     if not db_user or db_user.hashed_password != user.password + "notreallyhashed":
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,

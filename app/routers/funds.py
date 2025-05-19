@@ -8,11 +8,11 @@ from app.database import get_db
 router = APIRouter(prefix="/funds", tags=["Funds"])
 
 @router.get("/schemes/{fund_house}", response_model=List[FundSchema])
-def get_schemes(
+async def get_schemes(
     fund_house: str,
     page: int = Query(default=1, ge=1, description="Page number"),
     token: str = Depends(verify_token),
     db: Session = Depends(get_db)
 ):
-    data = fetch_mutual_fund_data(fund_house, page)
+    data = await fetch_mutual_fund_data(fund_house, page)
     return data

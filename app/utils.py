@@ -4,9 +4,11 @@ from fastapi import Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 import os
-import requests
+import aiohttp
 from typing import List, Dict, Any
-
+import json
+from redis import asyncio as aioredis
+import pickle
 load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -56,8 +58,20 @@ class CustomPagination:
             "has_previous": self.page > 1
         }
 
-def fetch_mutual_fund_data(rta_agent_code: str = "CAMS", page: int = 1, json=True):
-    url = f'https://{RAPIDAPI_HOST}/master'
+
+redis = aioredis.from_url("redis://localhost", encoding="utf-8", decode_responses=False)
+
+async def fetch_mutual_fund_data(rta_agent_code: str = "CAMS", page: int = 1, is_json=True):
+    # Create a cache key based on the function parameters
+    cache_key = f"mutual_fund_data:{rta_agent_code}:{page}:{is_json}"
+    
+    # Try to get data from cache first
+    cached_data = await redis.get(cache_key)
+    if cached_data:
+        print(cached_data)
+        return pickle.loads(cached_data)
+    
+    url = f'https://{RAPIDAPI_HOST}/latest'
     querystring = {"scheme_type":"Open","RTA_Agent_Code": rta_agent_code}
     headers = {
         "X-RapidAPI-Key": RAPIDAPI_KEY,
@@ -65,39 +79,33 @@ def fetch_mutual_fund_data(rta_agent_code: str = "CAMS", page: int = 1, json=Tru
     }
     
     try:
-        # First try to hit the actual API
-        response = requests.get(url, headers=headers, params=querystring)
-        
-        # If API call fails, fallback to default data
-        if response.status_code != 200:
-            print("API quota exceeded, falling back to default data")
-            curren_dir = os.getcwd()
-            with open(f'{curren_dir}/tests/dummy.json', 'r') as f:
-                print("API response taking from cache or json file")
-                response = requests.Response()
-                response._content = f.read().encode('utf-8')
-                response.status_code = 200
-        
-        if response.status_code == 200:
-            print("API call successful")
-            data = response.json()
-            if not json:
-                return data
-            paginator = CustomPagination(items=data, page=page)
-            return JSONResponse(
-                content={
-                    "data": paginator.get_page_items(),
-                    "pagination": paginator.get_pagination_info()
-                },
-                status_code=status.HTTP_200_OK
-            )
-        else:
-            return JSONResponse(
-                content={"detail": f"API request failed with status code: {response.status_code}"},
-                status_code=response.status_code
-            )
-    except requests.exceptions.RequestException as e:
-        return JSONResponse(
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, params=querystring) as response:
+                if response.status != 200:
+                    print("API quota exceeded, falling back to default data")
+                    curren_dir = os.getcwd()
+                    with open(f'{curren_dir}/tests/dummy.json', 'r') as f:
+                        print("API response taking from cache or json file")
+                        data = json.loads(f.read())
+                else:
+                    print("API call successful")
+                    data = await response.json()
+                
+                result = data if not is_json else JSONResponse(
+                    content={
+                        "data": CustomPagination(items=data, page=page).get_page_items(),
+                        "pagination": CustomPagination(items=data, page=page).get_pagination_info()
+                    },
+                    status_code=status.HTTP_200_OK
+                )
+                
+                # Caching for 3 hour 
+                await redis.setex(cache_key, 3600*3, pickle.dumps(result))
+                return result
+                
+    except Exception as e:
+        error_response = JSONResponse(
             content={"detail": f"Failed to fetch mutual fund data: {str(e)}"},
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+        return error_response

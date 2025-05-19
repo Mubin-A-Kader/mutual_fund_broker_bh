@@ -2,12 +2,22 @@ from fastapi import FastAPI, BackgroundTasks
 from app.routers import auth, funds, portfolio
 from app.database import engine, Base
 from fastapi_utils.tasks import repeat_every
+from contextlib import asynccontextmanager
+
 from app.tasks import update_portfolio_values
 from fastapi.middleware.cors import CORSMiddleware
 
-Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+# Create tables asynchronously on startup
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup logic
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+    yield 
+app = FastAPI(lifespan=lifespan)
+
 
 app.include_router(auth.router)
 app.include_router(funds.router)
