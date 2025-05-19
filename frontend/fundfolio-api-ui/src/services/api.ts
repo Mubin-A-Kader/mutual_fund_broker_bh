@@ -47,11 +47,6 @@ async function apiCall<T>(
     }
   });
   
-  // Add token to query params if provided
-  if (token && method === "GET") {
-    queryParams.append("token", token);
-  }
-  
   // Build URL with query params
   const url = `${API_URL}${endpoint}${
     queryParams.toString() ? `?${queryParams.toString()}` : ""
@@ -65,7 +60,8 @@ async function apiCall<T>(
     ...(data && { body: JSON.stringify(data) }),
   };
 
-  if (token && method !== "GET") {
+  // Add token to Authorization header if provided
+  if (token) {
     options.headers = {
       ...options.headers,
       Authorization: `Bearer ${token}`,
@@ -122,5 +118,5 @@ export const portfolioAPI = {
     apiCall<any>("/portfolio/", "GET", undefined, token),
     
   addToPortfolio: (token: string, portfolioItem: PortfolioItem) => 
-    apiCall<any>("/portfolio/", "POST", portfolioItem, token, { token }),
+    apiCall<any>("/portfolio/", "POST", portfolioItem, token),
 };

@@ -47,9 +47,10 @@ const Funds: React.FC = () => {
       try {
         const token = localStorage.getItem("access_token");
         // Fetch fund families
-        const familiesResponse = await axios.get(`http://127.0.0.1:8000/funds/fund-families?token=${token}`, {
+        const familiesResponse = await axios.get(`http://127.0.0.1:8000/funds/fund-families`, {
           headers: {
-            accept: 'application/json'
+            accept: 'application/json',
+            Authorization: `Bearer ${token}`
           }
         });
         setFundFamilies(familiesResponse.data.fund_families);
@@ -134,9 +135,10 @@ const Funds: React.FC = () => {
     const fetchFundFamilies = async () => {
       try {
         const token = localStorage.getItem("access_token");
-        const response = await axios.get(`http://127.0.0.1:8000/funds/fund-families?token=${token}`, {
+        const response = await axios.get(`http://127.0.0.1:8000/funds/fund-families`, {
           headers: {
-            accept: 'application/json'
+            accept: 'application/json',
+            Authorization: `Bearer ${token}`
           }
         });
         setFundFamilies(response.data.fund_families);
