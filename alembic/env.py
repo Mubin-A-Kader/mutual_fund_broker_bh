@@ -17,7 +17,7 @@ from app.models import *  # Import all your models here
 
 # this is the Alembic Config object
 config = context.config
-config.set_main_option('sqlalchemy.url', os.getenv("DATABASE_URL", ""))
+config.set_main_option('sqlalchemy.url', os.getenv("DATABASE_URL_", ""))
 
 # Interpret the config file for Python logging
 if config.config_file_name is not None:
