@@ -12,10 +12,12 @@ router = APIRouter(prefix="/funds", tags=["Funds"])
 async def get_schemes(
     fund_house: str,
     page: int = Query(default=1, ge=1, description="Page number"),
+    search: Optional[str] = Query(default=None, description="Search scheme name"),  
     current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    data = await fetch_mutual_fund_data(fund_house, page)
+    data = await fetch_mutual_fund_data(fund_house, page,search=search)
+
     return data
 
 @router.get("/fund-families")

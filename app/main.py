@@ -3,10 +3,15 @@ from app.routers import auth, funds, portfolio
 from app.database import engine, Base
 from fastapi_utils.tasks import repeat_every
 from contextlib import asynccontextmanager
+from dotenv import load_dotenv
 
 from app.tasks import update_portfolio_values
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
+load_dotenv()
+
+CRON_JOB_FREQ = int(os.getenv("CRON_JOB_FREQ", 3600))  
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
@@ -23,7 +28,7 @@ app.include_router(auth.router)
 app.include_router(funds.router)
 app.include_router(portfolio.router)
 
-@repeat_every(seconds=3600)  # Run every hour
+@repeat_every(seconds=CRON_JOB_FREQ)  # Run every hour
 async def periodic_portfolio_update():
     print("Running periodic portfolio update...")
     await update_portfolio_values()

@@ -32,6 +32,11 @@ docker-compose up --build
     - docker-compose up --build -d:
         - backend and frontend containers will be up in detached mode.
 ```
+2. stop and remove the containers:
+
+```
+docker-compose down
+```
 
 ## App Screenshots
 

@@ -19,8 +19,8 @@ class TokenData(BaseModel):
 
 # Funds
 class FundSchema(BaseModel):
-    fund_house: str
-    scheme_name: str
+    Mutual_Fund_Family: str
+    Scheme_Name: str
     Net_Asset_Value: float
 
 # Portfolio

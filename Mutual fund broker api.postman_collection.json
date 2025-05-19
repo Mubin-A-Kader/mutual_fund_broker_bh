@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "1ca20ce7-6c92-46c0-8941-69804f815e64",
-		"name": "FastAPI",
+		"_postman_id": "c8e4a0f0-34d8-4968-b1b1-920ae84159bb",
+		"name": "Mutual fund broker api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "23317511"
 	},
@@ -25,7 +25,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"email\": \"aliqua\",\n  \"password\": \"minim aliquip\"\n}",
+							"raw": "{\n  \"email\": \"ut adipisicing laborum\",\n  \"password\": \"cillum irure\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -56,7 +56,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"email\": \"aliqua\",\n  \"password\": \"minim aliquip\"\n}",
+									"raw": "{\n  \"email\": \"ut adipisicing laborum\",\n  \"password\": \"cillum irure\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -84,7 +84,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n  \"id\": 72783316,\n  \"email\": \"tempor commodo dolor cillum\"\n}"
+							"body": "{\n  \"id\": 65976089,\n  \"email\": \"nostrud anim Excepteur\"\n}"
 						},
 						{
 							"name": "Validation Error",
@@ -98,7 +98,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"email\": \"aliqua\",\n  \"password\": \"minim aliquip\"\n}",
+									"raw": "{\n  \"email\": \"ut adipisicing laborum\",\n  \"password\": \"cillum irure\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -126,7 +126,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"dolore cupidatat\",\n        \"voluptate ullamco proident\"\n      ],\n      \"msg\": \"dolor\",\n      \"type\": \"nostrud ex\"\n    },\n    {\n      \"loc\": [\n        \"elit \",\n        \"veniam in\"\n      ],\n      \"msg\": \"exercitation\",\n      \"type\": \"cillum dolor aliqua minim magna\"\n    }\n  ]\n}"
+							"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"ut laboris non\",\n        \"culpa aute do\"\n      ],\n      \"msg\": \"sint id et velit\",\n      \"type\": \"Ut id qui\"\n    },\n    {\n      \"loc\": [\n        \"cupidatat ea aliquip\",\n        \"pariatur dolor sit\"\n      ],\n      \"msg\": \"aliquip fugiat\",\n      \"type\": \"dolor occaecat\"\n    }\n  ]\n}"
 						}
 					]
 				},
@@ -146,7 +146,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"email\": \"aliqua\",\n  \"password\": \"minim aliquip\"\n}",
+							"raw": "{\n  \"email\": \"ut adipisicing laborum\",\n  \"password\": \"cillum irure\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -177,7 +177,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"email\": \"aliqua\",\n  \"password\": \"minim aliquip\"\n}",
+									"raw": "{\n  \"email\": \"ut adipisicing laborum\",\n  \"password\": \"cillum irure\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -205,7 +205,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n  \"access_token\": \"do cupidatat \",\n  \"token_type\": \"dolore et irure nisi\"\n}"
+							"body": "{\n  \"access_token\": \"veniam officia dolor\",\n  \"token_type\": \"ex ut\"\n}"
 						},
 						{
 							"name": "Validation Error",
@@ -219,7 +219,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"email\": \"aliqua\",\n  \"password\": \"minim aliquip\"\n}",
+									"raw": "{\n  \"email\": \"ut adipisicing laborum\",\n  \"password\": \"cillum irure\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -247,18 +247,28 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"dolore cupidatat\",\n        \"voluptate ullamco proident\"\n      ],\n      \"msg\": \"dolor\",\n      \"type\": \"nostrud ex\"\n    },\n    {\n      \"loc\": [\n        \"elit \",\n        \"veniam in\"\n      ],\n      \"msg\": \"exercitation\",\n      \"type\": \"cillum dolor aliqua minim magna\"\n    }\n  ]\n}"
+							"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"ut laboris non\",\n        \"culpa aute do\"\n      ],\n      \"msg\": \"sint id et velit\",\n      \"type\": \"Ut id qui\"\n    },\n    {\n      \"loc\": [\n        \"cupidatat ea aliquip\",\n        \"pariatur dolor sit\"\n      ],\n      \"msg\": \"aliquip fugiat\",\n      \"type\": \"dolor occaecat\"\n    }\n  ]\n}"
 						}
 					]
 				}
 			]
 		},
 		{
-			"name": "portfolio",
+			"name": "funds",
 			"item": [
 				{
-					"name": "Read Portfolio",
+					"name": "Get Schemes",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -267,18 +277,31 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/portfolio/?token=consequat fugiat ullamco officia",
+							"raw": "{{baseUrl}}/funds/schemes/:fund_house?page=1&search=nostrud nulla Excepteur labore",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"portfolio",
-								""
+								"funds",
+								"schemes",
+								":fund_house"
 							],
 							"query": [
 								{
-									"key": "token",
-									"value": "consequat fugiat ullamco officia",
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								},
+								{
+									"key": "search",
+									"value": "nostrud nulla Excepteur labore",
+									"description": "Search scheme name"
+								}
+							],
+							"variable": [
+								{
+									"key": "fund_house",
+									"value": "non consectetur ea sint",
 									"description": "(Required) "
 								}
 							]
@@ -291,24 +314,169 @@
 								"method": "GET",
 								"header": [
 									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									},
+									{
 										"key": "Accept",
 										"value": "application/json"
 									}
 								],
 								"url": {
-									"raw": "{{baseUrl}}/portfolio/?token=consequat fugiat ullamco officia",
+									"raw": "{{baseUrl}}/funds/schemes/:fund_house?page=1&search=nostrud nulla Excepteur labore",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"portfolio",
-										""
+										"funds",
+										"schemes",
+										":fund_house"
 									],
 									"query": [
 										{
-											"key": "token",
-											"value": "consequat fugiat ullamco officia"
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "search",
+											"value": "nostrud nulla Excepteur labore"
 										}
+									],
+									"variable": [
+										{
+											"key": "fund_house",
+											"value": "non consectetur ea sint",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n  {\n    \"Mutual_Fund_Family\": \"deserunt Lorem ipsum\",\n    \"Scheme_Name\": \"consectetur non dolor\",\n    \"Net_Asset_Value\": -26987224.510189295\n  },\n  {\n    \"Mutual_Fund_Family\": \"in\",\n    \"Scheme_Name\": \"ullamco ut minim nisi\",\n    \"Net_Asset_Value\": -3365892.3624102324\n  }\n]"
+						},
+						{
+							"name": "Validation Error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/funds/schemes/:fund_house?page=1&search=nostrud nulla Excepteur labore",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"funds",
+										"schemes",
+										":fund_house"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "search",
+											"value": "nostrud nulla Excepteur labore"
+										}
+									],
+									"variable": [
+										{
+											"key": "fund_house",
+											"value": "non consectetur ea sint",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+							"code": 422,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"ut laboris non\",\n        \"culpa aute do\"\n      ],\n      \"msg\": \"sint id et velit\",\n      \"type\": \"Ut id qui\"\n    },\n    {\n      \"loc\": [\n        \"cupidatat ea aliquip\",\n        \"pariatur dolor sit\"\n      ],\n      \"msg\": \"aliquip fugiat\",\n      \"type\": \"dolor occaecat\"\n    }\n  ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Fund Families",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/funds/fund-families",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"funds",
+								"fund-families"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/funds/fund-families",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"funds",
+										"fund-families"
 									]
 								}
 							},
@@ -323,36 +491,74 @@
 							],
 							"cookie": [],
 							"body": "{}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "portfolio",
+			"item": [
+				{
+					"name": "Read Portfolio",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
 						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/portfolio/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"portfolio",
+								""
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "Validation Error",
+							"name": "Successful Response",
 							"originalRequest": {
 								"method": "GET",
 								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									},
 									{
 										"key": "Accept",
 										"value": "application/json"
 									}
 								],
 								"url": {
-									"raw": "{{baseUrl}}/portfolio/?token=consequat fugiat ullamco officia",
+									"raw": "{{baseUrl}}/portfolio/",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"portfolio",
 										""
-									],
-									"query": [
-										{
-											"key": "token",
-											"value": "consequat fugiat ullamco officia"
-										}
 									]
 								}
 							},
-							"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
-							"code": 422,
+							"status": "OK",
+							"code": 200,
 							"_postman_previewlanguage": "json",
 							"header": [
 								{
@@ -361,13 +567,23 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"dolore cupidatat\",\n        \"voluptate ullamco proident\"\n      ],\n      \"msg\": \"dolor\",\n      \"type\": \"nostrud ex\"\n    },\n    {\n      \"loc\": [\n        \"elit \",\n        \"veniam in\"\n      ],\n      \"msg\": \"exercitation\",\n      \"type\": \"cillum dolor aliqua minim magna\"\n    }\n  ]\n}"
+							"body": "{}"
 						}
 					]
 				},
 				{
 					"name": "Add To Portfolio",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -381,7 +597,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"fund_name\": \"irure voluptate ea\",\n  \"units\": -77940560.15520585\n}",
+							"raw": "{\n  \"fund_name\": \"ad qui non adipisicing\",\n  \"units\": 9866511.096004024\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -389,20 +605,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/portfolio/?token=consequat fugiat ullamco officia",
+							"raw": "{{baseUrl}}/portfolio/",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"portfolio",
 								""
-							],
-							"query": [
-								{
-									"key": "token",
-									"value": "consequat fugiat ullamco officia",
-									"description": "(Required) "
-								}
 							]
 						}
 					},
@@ -413,13 +622,18 @@
 								"method": "POST",
 								"header": [
 									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									},
+									{
 										"key": "Accept",
 										"value": "application/json"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"fund_name\": \"irure voluptate ea\",\n  \"units\": -77940560.15520585\n}",
+									"raw": "{\n  \"fund_name\": \"ad qui non adipisicing\",\n  \"units\": 9866511.096004024\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -427,19 +641,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/portfolio/?token=consequat fugiat ullamco officia",
+									"raw": "{{baseUrl}}/portfolio/",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"portfolio",
 										""
-									],
-									"query": [
-										{
-											"key": "token",
-											"value": "consequat fugiat ullamco officia"
-										}
 									]
 								}
 							},
@@ -461,13 +669,18 @@
 								"method": "POST",
 								"header": [
 									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									},
+									{
 										"key": "Accept",
 										"value": "application/json"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"fund_name\": \"irure voluptate ea\",\n  \"units\": -77940560.15520585\n}",
+									"raw": "{\n  \"fund_name\": \"ad qui non adipisicing\",\n  \"units\": 9866511.096004024\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -475,19 +688,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/portfolio/?token=consequat fugiat ullamco officia",
+									"raw": "{{baseUrl}}/portfolio/",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"portfolio",
 										""
-									],
-									"query": [
-										{
-											"key": "token",
-											"value": "consequat fugiat ullamco officia"
-										}
 									]
 								}
 							},
@@ -501,155 +708,9 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"dolore cupidatat\",\n        \"voluptate ullamco proident\"\n      ],\n      \"msg\": \"dolor\",\n      \"type\": \"nostrud ex\"\n    },\n    {\n      \"loc\": [\n        \"elit \",\n        \"veniam in\"\n      ],\n      \"msg\": \"exercitation\",\n      \"type\": \"cillum dolor aliqua minim magna\"\n    }\n  ]\n}"
+							"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"ut laboris non\",\n        \"culpa aute do\"\n      ],\n      \"msg\": \"sint id et velit\",\n      \"type\": \"Ut id qui\"\n    },\n    {\n      \"loc\": [\n        \"cupidatat ea aliquip\",\n        \"pariatur dolor sit\"\n      ],\n      \"msg\": \"aliquip fugiat\",\n      \"type\": \"dolor occaecat\"\n    }\n  ]\n}"
 						}
 					]
-				}
-			]
-		},
-		{
-			"name": "Get Schemes",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "{{baseUrl}}/funds/schemes/:fund_house?page=1&token=consequat fugiat ullamco officia",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"funds",
-						"schemes",
-						":fund_house"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "1",
-							"description": "Page number"
-						},
-						{
-							"key": "token",
-							"value": "consequat fugiat ullamco officia",
-							"description": "(Required) "
-						}
-					],
-					"variable": [
-						{
-							"key": "fund_house",
-							"value": "sit proident mollit adipisicing",
-							"description": "(Required) "
-						}
-					]
-				}
-			},
-			"response": [
-				{
-					"name": "Successful Response",
-					"originalRequest": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/funds/schemes/:fund_house?page=1&token=consequat fugiat ullamco officia",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"funds",
-								"schemes",
-								":fund_house"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "1"
-								},
-								{
-									"key": "token",
-									"value": "consequat fugiat ullamco officia"
-								}
-							],
-							"variable": [
-								{
-									"key": "fund_house",
-									"value": "sit proident mollit adipisicing",
-									"description": "(Required) "
-								}
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						}
-					],
-					"cookie": [],
-					"body": "[\n  {\n    \"fund_house\": \"ea labore proident\",\n    \"scheme_name\": \"do\",\n    \"nav\": 74978469.0838145\n  },\n  {\n    \"fund_house\": \"reprehenderit in mollit aute\",\n    \"scheme_name\": \"tempor est dolor\",\n    \"nav\": 18951991.816119313\n  }\n]"
-				},
-				{
-					"name": "Validation Error",
-					"originalRequest": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/funds/schemes/:fund_house?page=1&token=consequat fugiat ullamco officia",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"funds",
-								"schemes",
-								":fund_house"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "1"
-								},
-								{
-									"key": "token",
-									"value": "consequat fugiat ullamco officia"
-								}
-							],
-							"variable": [
-								{
-									"key": "fund_house",
-									"value": "sit proident mollit adipisicing",
-									"description": "(Required) "
-								}
-							]
-						}
-					},
-					"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
-					"code": 422,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						}
-					],
-					"cookie": [],
-					"body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"dolore cupidatat\",\n        \"voluptate ullamco proident\"\n      ],\n      \"msg\": \"dolor\",\n      \"type\": \"nostrud ex\"\n    },\n    {\n      \"loc\": [\n        \"elit \",\n        \"veniam in\"\n      ],\n      \"msg\": \"exercitation\",\n      \"type\": \"cillum dolor aliqua minim magna\"\n    }\n  ]\n}"
 				}
 			]
 		},

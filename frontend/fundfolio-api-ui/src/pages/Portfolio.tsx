@@ -31,7 +31,6 @@ const Portfolio: React.FC = () => {
       if (!localStorage.getItem("access_token")) return;
 
       try {
-        debugger;
         setIsLoading(true);
         setError(null);
         const response = await portfolioAPI.getPortfolio(localStorage.getItem("access_token"));
@@ -40,12 +39,10 @@ const Portfolio: React.FC = () => {
         // Assuming the API response directly returns the portfolio data
         setPortfolioData(response);
       } catch (err: any) {
-        debugger;
         console.error("Error fetching portfolio:", err);
         setError("Failed to load portfolio. Please try again later.");
         setPortfolioData(null);
       } finally {
-        debugger;
         setIsLoading(false);
       }
     };
@@ -104,12 +101,12 @@ const Portfolio: React.FC = () => {
 
                 {portfolioData.total_profit_loss !== undefined && (
                   <p
-                    className={`text-sm text-muted-foreground ${
+                    className={`text-sm ${
                       portfolioData.total_profit_loss > 0
                         ? 'text-green-600'
                         : portfolioData.total_profit_loss < 0
                         ? 'text-red-600'
-                        : ''
+                        : 'text-muted-foreground'
                     }`}
                   >
                     Profit/Loss: ₹{portfolioData.total_profit_loss?.toLocaleString()}

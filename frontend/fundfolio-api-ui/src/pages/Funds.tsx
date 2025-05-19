@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import { fundsAPI } from "../services/api";
@@ -16,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import axios from "axios";
 import DataTable from 'react-data-table-component';
+import { debounce } from "lodash";
 
 interface FundSchema {
   Scheme_Name: string;
@@ -36,7 +36,7 @@ const Funds: React.FC = () => {
   const [funds, setFunds] = useState<FundSchema[]>([]);
   const [page, setPage] = useState(1);
   const [totalRows, setTotalRows] = useState(0);
-  const [perPage, setPerPage] = useState(5);
+  const [perPage, setPerPage] = useState(15);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
@@ -71,9 +71,10 @@ const Funds: React.FC = () => {
       setIsLoading(true);
       try {
         const response = await fundsAPI.getSchemes(
-          selectedFundFamily || "Aditya Birla Sun Life Mutual Fund", // Use selected fund family or fallback to CAMS
+          selectedFundFamily || "Aditya Birla Sun Life Mutual Fund",
           1,
-          localStorage.getItem("access_token")
+          localStorage.getItem("access_token"),
+          searchTerm.length >= 3 ? searchTerm : "" // Pass search param if 3+ chars
         );
         setFundHouses(response.data);
         setTotalRows(response.pagination.total_items);
@@ -88,7 +89,7 @@ const Funds: React.FC = () => {
     };
 
     fetchFundHouses();
-  }, [selectedFundFamily]); // Add selectedFundFamily as dependency
+  }, [selectedFundFamily, searchTerm]); // Add searchTerm as dependency
 
   // Fetch funds when selected fund house or page changes
   // Remove the initial fetchFundHouses useEffect and combine with fetchFunds
@@ -150,16 +151,24 @@ const Funds: React.FC = () => {
     fetchFundFamilies();
   }, []);
 
-  const fetchFunds = async (family: string, pageNumber: number) => {
+  // Debounced fetchFunds for search
+  const debouncedFetchFunds = React.useRef(
+    debounce((family: string, pageNumber: number, search: string) => {
+      fetchFunds(family, pageNumber, search);
+    }, 400)
+  ).current;
+
+  // Update fetchFunds to accept search param
+  const fetchFunds = async (family: string, pageNumber: number, search: string = "") => {
     if (!family) return;
-    
     setIsLoading(true);
     try {
       const accessToken = localStorage.getItem("access_token");
       const response = await fundsAPI.getSchemes(
         family,
         pageNumber,
-        accessToken
+        accessToken,
+        search // Pass search param
       );
       if (response && response.data) {
         setFunds(response.data);
@@ -183,6 +192,19 @@ const Funds: React.FC = () => {
     }
   };
 
+  // Handle search input
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    if (value.length >= 3) {
+      debouncedFetchFunds(selectedFundFamily, 1, value);
+      setPage(1);
+    } else if (value.length === 0) {
+      fetchFunds(selectedFundFamily, 1, "");
+      setPage(1);
+    }
+  };
+
   const handleFundFamilyChange = (value: string) => {
     setSelectedFundFamily(value);
     setPage(1);
@@ -191,7 +213,8 @@ const Funds: React.FC = () => {
 
   const handlePageChange = (page: number) => {
     setPage(page);
-    fetchFunds(selectedFundFamily, page);
+    // Always use searchTerm if it's 3+ chars, else empty string
+    fetchFunds(selectedFundFamily, page, searchTerm.length >= 3 ? searchTerm : "");
   };
 
   const handlePerRowsChange = async (newPerPage: number, page: number) => {
@@ -199,9 +222,7 @@ const Funds: React.FC = () => {
     setPage(page);
   };
 
-  const filteredFunds = funds.filter(fund =>
-    fund.Scheme_Name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Remove filteredFunds and use funds directly from backend
 
   const handleAddToPortfolio = (fund: FundSchema) => {
     navigate("/portfolio/add", { state: { fundName: fund.Scheme_Name } });
@@ -279,12 +300,15 @@ const Funds: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <h1 className="text-3xl font-bold tracking-tight">Mutual Funds</h1>
           <div className="flex items-center gap-4">
-            <div className="w-[200px]">
+            <div className="w-[200px] flex items-center gap-3">
+              <Label htmlFor="fund-family-select" className="font-large">
+                Fund
+              </Label>
               <Select
                 value={selectedFundFamily}
                 onValueChange={handleFundFamilyChange}
               >
-                <SelectTrigger>
+                <SelectTrigger id="fund-family-select">
                   <SelectValue placeholder="Select Fund Family" />
                 </SelectTrigger>
                 <SelectContent>
@@ -305,7 +329,7 @@ const Funds: React.FC = () => {
                 placeholder="Search funds..."
                 className="max-w-xs"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleSearchChange}
               />
             </div>
           </div>
@@ -317,9 +341,9 @@ const Funds: React.FC = () => {
               <div key={i} className="h-48 rounded-lg bg-muted animate-pulse" />
             ))}
           </div>
-        ) : filteredFunds.length > 0 ? (
+        ) : funds.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredFunds.map((fund, index) => (
+            {funds.map((fund, index) => (
               <Card key={index} className="portfolio-card">
                 <CardHeader>
                   <CardTitle className="text-lg font-semibold line-clamp-2">

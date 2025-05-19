@@ -1,5 +1,5 @@
-
 import { toast } from "sonner";
+import axios from "axios";
 
 // Set the base URL for API requests
 const API_URL = "http://0.0.0.0:8000";
@@ -102,14 +102,21 @@ export const authAPI = {
 };
 
 export const fundsAPI = {
-  getSchemes: (fundHouse: string, page: number = 1, token?: string) => 
-    apiCall<FundSchema[]>(
-      `/funds/schemes/${fundHouse}`, 
-      "GET", 
-      undefined, 
-      token, 
-      { page }
-    ),
+  getSchemes: async (family: string, page: number, token: string, search: string = "") => {
+    const params: any = { page };
+    if (search && search.length >= 3) params.search = search;
+    const response = await axios.get(
+      `http://127.0.0.1:8000/funds/schemes/${encodeURIComponent(family)}`,
+      {
+        params,
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  },
 };
 
 // Portfolio API functions
