@@ -2,15 +2,18 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.schemas import PortfolioCreateAPI,PortfolioCreate
+from app.schemas import PortfolioCreateAPI, PortfolioCreate
 from app.crud import get_portfolios, create_portfolio_item
-from app.utils import verify_token, fetch_mutual_fund_data
+from app.utils import get_current_user, fetch_mutual_fund_data
 
 router = APIRouter(prefix="/portfolio", tags=["Portfolio"])
 
 @router.get("/")
-async def read_portfolio(token: str = Depends(verify_token), db: Session = Depends(get_db)):
-    user_id = token.get("id")
+async def read_portfolio(
+    current_user: dict = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    user_id = current_user.get("id")
     portfolios = await get_portfolios(db, user_id)
     
     calculated_portfolio = []
@@ -35,8 +38,12 @@ async def read_portfolio(token: str = Depends(verify_token), db: Session = Depen
     }
 
 @router.post("/")
-async def add_to_portfolio(portfolio: PortfolioCreateAPI, token: str = Depends(verify_token), db: Session = Depends(get_db)):
-    user_id = token.get("id")
+async def add_to_portfolio(
+    portfolio: PortfolioCreateAPI,
+    current_user: dict = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    user_id = current_user.get("id")
     fund_data = await fetch_mutual_fund_data(is_json=False)
     
     if isinstance(fund_data, JSONResponse):

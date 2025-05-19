@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
-from app.utils import fetch_mutual_fund_data, verify_token
-from typing import List
+from app.utils import fetch_mutual_fund_data, get_current_user
+from typing import List, Optional
 from app.schemas import FundSchema
 from sqlalchemy.orm import Session
 from app.database import get_db
@@ -12,7 +12,7 @@ router = APIRouter(prefix="/funds", tags=["Funds"])
 async def get_schemes(
     fund_house: str,
     page: int = Query(default=1, ge=1, description="Page number"),
-    token: str = Depends(verify_token),
+    current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     data = await fetch_mutual_fund_data(fund_house, page)
@@ -20,11 +20,10 @@ async def get_schemes(
 
 @router.get("/fund-families")
 async def get_fund_families(
-    token: str = Depends(verify_token),
+    current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     # This will use the same caching mechanism as fetch_mutual_fund_data
-    # The data is already cached for 3 hours in the fetch_mutual_fund_data function
     data = await fetch_mutual_fund_data(is_json=False)
     
     if isinstance(data, JSONResponse):

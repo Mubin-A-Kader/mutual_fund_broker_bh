@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Security
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 import os
@@ -9,6 +9,8 @@ from typing import List, Dict, Any
 import json
 from redis import asyncio as aioredis
 import pickle
+from fastapi import HTTPException
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -167,4 +169,26 @@ async def fetch_mutual_fund_data(Mutual_Fund_Family: str = None, page: int = 1, 
         return JSONResponse(
             content={"detail": f"Failed to get Redis connection: {str(e)}"},
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+security = HTTPBearer()
+
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Security(security)):
+    try:
+
+        token = credentials.credentials
+        payload = verify_token(token)
+        if not payload:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid token or expired token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+            
+        return payload
+    except Exception as e:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid authentication credentials",
+            headers={"WWW-Authenticate": "Bearer"},
         )
