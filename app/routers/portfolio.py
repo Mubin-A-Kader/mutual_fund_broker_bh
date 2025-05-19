@@ -23,7 +23,7 @@ async def read_portfolio(token: str = Depends(verify_token), db: Session = Depen
             "current_price": portfolio.current_price,
             "current_value": portfolio.units * portfolio.current_price,
             "profit_loss": (portfolio.units * portfolio.current_price) - (portfolio.units * portfolio.purchase_price),
-            "profit_loss_percentage": ((portfolio.current_price - portfolio.purchase_price) / portfolio.purchase_price) * 100
+            "profit_loss_percentage": ((portfolio.current_price - portfolio.purchase_price) / portfolio.purchase_price) * 100 if portfolio.purchase_price else 0
         }
         calculated_portfolio.append(portfolio_data)
     
@@ -51,8 +51,8 @@ async def add_to_portfolio(portfolio: PortfolioCreateAPI, token: str = Depends(v
     portfolio_obj = PortfolioCreate(
         fund_name=portfolio.fund_name,
         units=portfolio.units,
-        purchase_price=float(fund_info.get("NAV", 0)),
-        current_price=float(fund_info.get("NAV", 0))
+        purchase_price=float(fund_info.get("Net_Asset_Value", 0)),
+        current_price=float(fund_info.get("Net_Asset_Value", 0))
     )
     
     return await create_portfolio_item(db, portfolio_obj, user_id)

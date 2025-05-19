@@ -17,7 +17,12 @@ from app.models import *  # Import all your models here
 
 # this is the Alembic Config object
 config = context.config
-config.set_main_option('sqlalchemy.url', os.getenv("DATABASE_URL_", ""))
+
+# Get the URL from environment variable, using aiosqlite
+database_url = os.getenv("DATABASE_URL_", "sqlite+aiosqlite:///./mutual_fund.db")
+# Convert async URL to sync URL for Alembic
+sync_database_url = database_url.replace("sqlite+aiosqlite:", "sqlite:")
+config.set_main_option('sqlalchemy.url', sync_database_url)
 
 # Interpret the config file for Python logging
 if config.config_file_name is not None:

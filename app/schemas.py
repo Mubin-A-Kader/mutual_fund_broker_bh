@@ -21,7 +21,7 @@ class TokenData(BaseModel):
 class FundSchema(BaseModel):
     fund_house: str
     scheme_name: str
-    nav: float
+    Net_Asset_Value: float
 
 # Portfolio
 class PortfolioCreate(BaseModel):

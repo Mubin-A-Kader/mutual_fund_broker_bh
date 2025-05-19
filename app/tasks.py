@@ -11,13 +11,13 @@ async def update_portfolio_values():
         try:
             result = await db.execute(select(Portfolio))
             portfolios = result.scalars().all()
-            fund_data = await fetch_mutual_fund_data()
+            fund_data = await fetch_mutual_fund_data(is_json=False)
             
             for portfolio in portfolios:
                 # Find matching fund in the API response
                 fund_info = next((fund for fund in fund_data if fund["Scheme_Name"] == portfolio.fund_name), None)
                 if fund_info:
-                    portfolio.current_price = float(fund_info.get("NAV", 0))
+                    portfolio.current_price = float(fund_info.get("Net_Asset_Value", 0))
                     portfolio.last_updated = datetime.now()
             
             await db.commit()

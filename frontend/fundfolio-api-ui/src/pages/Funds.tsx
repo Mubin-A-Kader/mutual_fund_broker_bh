@@ -11,9 +11,8 @@ import DataTable from 'react-data-table-component';
 
 interface FundSchema {
   Scheme_Name: string;
-  AMC_Code: string;
-  Fund_House: string;
-  NAV: number;
+  Mutual_Fund_Family: string;
+  Net_Asset_Value: number;
 }
 
 const Funds: React.FC = () => {
@@ -107,10 +106,10 @@ const Funds: React.FC = () => {
       sortable: true,
     },
     {
-      name: 'Minimum Amount',
-      selector: (row: FundSchema) => row.NAV || 0,
+      name: 'Net_Asset_Value',
+      selector: (row: FundSchema) => row.Net_Asset_Value || 0,
       sortable: true,
-      format: (row: FundSchema) => `₹${(row.NAV || 0).toLocaleString('en-IN')}`,
+      format: (row: FundSchema) => `₹${(row.Net_Asset_Value || 0).toLocaleString('en-IN')}`,
     },
   ];
 
@@ -201,11 +200,11 @@ const Funds: React.FC = () => {
                 <CardContent className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Fund House:</span>
-                    <span className="font-medium">{fund.AMC_Code || 'N/A'}</span>
+                    <span className="font-medium">{fund.Mutual_Fund_Family || 'N/A'}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Minimum Amount:</span>
-                    <span className="font-medium">₹{(fund.NAV || 0).toLocaleString('en-IN')}</span>
+                    <span className="text-muted-foreground">NAV:</span>
+                    <span className="font-medium">₹{(fund.Net_Asset_Value || 0).toLocaleString('en-IN')}</span>
                   </div>
                 </CardContent>
                 <CardFooter>

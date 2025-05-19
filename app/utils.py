@@ -59,53 +59,112 @@ class CustomPagination:
         }
 
 
-redis = aioredis.from_url("redis://localhost", encoding="utf-8", decode_responses=False)
-
-async def fetch_mutual_fund_data(rta_agent_code: str = "CAMS", page: int = 1, is_json=True):
-    # Create a cache key based on the function parameters
-    cache_key = f"mutual_fund_data:{rta_agent_code}:{page}:{is_json}"
-    
-    # Try to get data from cache first
-    cached_data = await redis.get(cache_key)
-    if cached_data:
-        print(cached_data)
-        return pickle.loads(cached_data)
-    
-    url = f'https://{RAPIDAPI_HOST}/latest'
-    querystring = {"scheme_type":"Open","RTA_Agent_Code": rta_agent_code}
-    headers = {
-        "X-RapidAPI-Key": RAPIDAPI_KEY,
-        "X-RapidAPI-Host": RAPIDAPI_HOST
-    }
-    
+# Update the Redis connection to use the service name with fallback
+async def get_redis_connection():
     try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, headers=headers, params=querystring) as response:
-                if response.status != 200:
-                    print("API quota exceeded, falling back to default data")
-                    curren_dir = os.getcwd()
-                    with open(f'{curren_dir}/tests/dummy.json', 'r') as f:
-                        print("API response taking from cache or json file")
-                        data = json.loads(f.read())
-                else:
-                    print("API call successful")
-                    data = await response.json()
-                
-                result = data if not is_json else JSONResponse(
-                    content={
-                        "data": CustomPagination(items=data, page=page).get_page_items(),
-                        "pagination": CustomPagination(items=data, page=page).get_pagination_info()
-                    },
-                    status_code=status.HTTP_200_OK
-                )
-                
-                # Caching for 3 hour 
-                await redis.setex(cache_key, 3600*3, pickle.dumps(result))
-                return result
-                
+        # Try Docker Redis first
+        redis = await aioredis.from_url("redis://redis:6379", encoding="utf-8", decode_responses=False)
+        await redis.ping()
+        return redis
     except Exception as e:
-        error_response = JSONResponse(
-            content={"detail": f"Failed to fetch mutual fund data: {str(e)}"},
+        print(f"Docker Redis connection failed: {e}")
+        try:
+            # Fallback to local Redis
+            redis = await aioredis.from_url("redis://localhost:6379", encoding="utf-8", decode_responses=False)
+            await redis.ping()
+            print("Connected to local Redis")
+            return redis
+        except Exception as e:
+            print(f"Local Redis connection failed: {e}")
+            raise
+
+# Initialize Redis connection
+redis = None
+
+async def get_redis():
+    global redis
+    if redis is None:
+        redis = await get_redis_connection()
+    return redis
+
+# Replace the direct redis initialization with the async initialization
+# The redis variable will be initialized when first needed in fetch_mutual_fund_data
+
+async def fetch_mutual_fund_data(Mutual_Fund_Family: str = None, page: int = 1, is_json=True):
+    try:
+        redis_client = await get_redis()
+
+        base_cache_key = f"mutual_fund_data:raw:{Mutual_Fund_Family if Mutual_Fund_Family else 'all'}"
+        
+        cached_raw_data = await redis_client.get(base_cache_key)
+        
+        if cached_raw_data:
+            print("Getting data from Redis cache")
+            data = pickle.loads(cached_raw_data)
+            # Filter data only if Mutual_Fund_Family is specified
+            if Mutual_Fund_Family:
+                data = [item for item in data if item.get('Mutual_Fund_Family') == Mutual_Fund_Family]
+        else:
+            url = f'https://{RAPIDAPI_HOST}/latest'
+            querystring = {"scheme_type": "Open"}
+            if Mutual_Fund_Family:
+                querystring["Mutual_Fund_Family"] = Mutual_Fund_Family
+                
+            headers = {
+                "X-RapidAPI-Key": RAPIDAPI_KEY,
+                "X-RapidAPI-Host": RAPIDAPI_HOST
+            }
+            
+            try:
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(url, headers=headers, params=querystring) as response:
+                        if response.status != 200:
+                            print("API quota exceeded, falling back to default data")
+                            curren_dir = os.getcwd()
+                            with open(f'{curren_dir}/tests/dummy.json', 'r') as f:
+                                print("API response taking from cache or json file")
+                                data = json.loads(f.read())
+                                # Filter data only if Mutual_Fund_Family is specified
+                                if Mutual_Fund_Family:
+                                    data = [item for item in data if item.get('Mutual_Fund_Family') == Mutual_Fund_Family]
+                        else:
+                            print("API call successful")
+                            data = await response.json()
+                        
+                        # Cache the raw data for 3 hours
+                        await redis.setex(base_cache_key, 3600*3, pickle.dumps(data))
+            except Exception as e:
+                return JSONResponse(
+                    content={"detail": f"Failed to fetch mutual fund data: {str(e)}"},
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+        
+        # If raw data is requested, return it directly
+        if not is_json:
+            return data
+        
+        # For paginated JSON response, create a paginated cache key
+        paginated_cache_key = f"mutual_fund_data:paginated:{Mutual_Fund_Family}:{page}"
+        cached_paginated_data = await redis.get(paginated_cache_key)
+        
+        if cached_paginated_data:
+            print("Getting paginated data from Redis cache")
+            return pickle.loads(cached_paginated_data)
+        
+        # Create new paginated response
+        paginated_response = JSONResponse(
+            content={
+                "data": CustomPagination(items=data, page=page).get_page_items(),
+                "pagination": CustomPagination(items=data, page=page).get_pagination_info()
+            },
+            status_code=status.HTTP_200_OK
+        )
+        
+        # Cache the paginated response
+        await redis.setex(paginated_cache_key, 3600*3, pickle.dumps(paginated_response))
+        return paginated_response
+    except Exception as e:
+        return JSONResponse(
+            content={"detail": f"Failed to get Redis connection: {str(e)}"},
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
-        return error_response
