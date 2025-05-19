@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Layout from "../components/Layout";
+import { toast } from "sonner";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -43,9 +44,11 @@ const Login: React.FC = () => {
 
       } else {
         console.error("Login failed:", response);
+        toast.error(response.data.detail || "Login failed");
       }
     } catch (error) {
       console.error("Login error:", error);
+      toast.error("Something went wrong");
       // You might want to add error handling here
     } finally {
       setIsLoading(false);

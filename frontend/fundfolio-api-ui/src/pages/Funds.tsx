@@ -1,23 +1,38 @@
 
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
-import { fundsAPI } from "../services/api";  // Remove FundSchema from here since we define it below
+import { fundsAPI } from "../services/api";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import axios from "axios";
 import DataTable from 'react-data-table-component';
 
 interface FundSchema {
   Scheme_Name: string;
   Mutual_Fund_Family: string;
   Net_Asset_Value: number;
+  data: any[];
+  pagination: {
+    current_page: number;
+    total_items: number;
+  };
 }
 
 const Funds: React.FC = () => {
   const [fundHouses, setFundHouses] = useState<string[]>([]);
   const [selectedFundHouse, setSelectedFundHouse] = useState<string>("");
+  const [fundFamilies, setFundFamilies] = useState<string[]>([]);
+  const [selectedFundFamily, setSelectedFundFamily] = useState<string>("Aditya Birla Sun Life Mutual Fund");
   const [funds, setFunds] = useState<FundSchema[]>([]);
   const [page, setPage] = useState(1);
   const [totalRows, setTotalRows] = useState(0);
@@ -26,13 +41,39 @@ const Funds: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
+  // Single useEffect for initial load
+  useEffect(() => {
+    const initializeData = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        // Fetch fund families
+        const familiesResponse = await axios.get(`http://127.0.0.1:8000/funds/fund-families?token=${token}`, {
+          headers: {
+            accept: 'application/json'
+          }
+        });
+        setFundFamilies(familiesResponse.data.fund_families);
+        
+        // Fetch initial funds data
+        await fetchFunds("Aditya Birla Sun Life Mutual Fund", 1);
+      } catch (error) {
+        console.error("Error initializing data:", error);
+      }
+    };
+
+    initializeData();
+  }, []); // Empty dependency array as this should only run once on mount
+
   // Fetch fund houses on component mount
   useEffect(() => {
     const fetchFundHouses = async () => {
       setIsLoading(true);
       try {
-        const response = await fundsAPI.getSchemes("CAMS",1,localStorage.getItem("access_token"));
-        console.log(response,"iiiiii");
+        const response = await fundsAPI.getSchemes(
+          selectedFundFamily || "Aditya Birla Sun Life Mutual Fund", // Use selected fund family or fallback to CAMS
+          1,
+          localStorage.getItem("access_token")
+        );
         setFundHouses(response.data);
         setTotalRows(response.pagination.total_items);
         if (response.data.length > 0) {
@@ -46,19 +87,25 @@ const Funds: React.FC = () => {
     };
 
     fetchFundHouses();
-  }, []);
+  }, [selectedFundFamily]); // Add selectedFundFamily as dependency
 
   // Fetch funds when selected fund house or page changes
+  // Remove the initial fetchFundHouses useEffect and combine with fetchFunds
   useEffect(() => {
     const fetchFunds = async () => {
-      if (!selectedFundHouse) return;
+      if (!selectedFundFamily) return; // Only fetch if a fund family is selected
       
       setIsLoading(true);
       try {
         const accessToken = localStorage.getItem("access_token");
-        const response = await fundsAPI.getSchemes(selectedFundHouse, page, accessToken);
+        const response = await fundsAPI.getSchemes(
+          selectedFundFamily,
+          page,
+          accessToken
+        );
         if (response && response.data) {
           setFunds(response.data);
+          setFundHouses(response.data);
           // Update pagination state based on response
           if (response.pagination) {
             setTotalRows(response.pagination.total_items || 0);
@@ -66,11 +113,13 @@ const Funds: React.FC = () => {
           }
         } else {
           setFunds([]);
+          setFundHouses([]);
           setTotalRows(0);
         }
       } catch (error) {
         console.error("Error fetching funds:", error);
         setFunds([]);
+        setFundHouses([]);
         setTotalRows(0);
       } finally {
         setIsLoading(false);
@@ -78,10 +127,69 @@ const Funds: React.FC = () => {
     };
 
     fetchFunds();
-  }, [selectedFundHouse, page]);
+  }, [selectedFundFamily, page]); // Only depend on selectedFundFamily and page
+
+  // Add new useEffect for fetching fund families
+  useEffect(() => {
+    const fetchFundFamilies = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        const response = await axios.get(`http://127.0.0.1:8000/funds/fund-families?token=${token}`, {
+          headers: {
+            accept: 'application/json'
+          }
+        });
+        setFundFamilies(response.data.fund_families);
+      } catch (error) {
+        console.error("Error fetching fund families:", error);
+      }
+    };
+
+    fetchFundFamilies();
+  }, []);
+
+  const fetchFunds = async (family: string, pageNumber: number) => {
+    if (!family) return;
+    
+    setIsLoading(true);
+    try {
+      const accessToken = localStorage.getItem("access_token");
+      const response = await fundsAPI.getSchemes(
+        family,
+        pageNumber,
+        accessToken
+      );
+      if (response && response.data) {
+        setFunds(response.data);
+        setFundHouses(response.data);
+        if (response.pagination) {
+          setTotalRows(response.pagination.total_items || 0);
+          setPage(response.pagination.current_page || 1);
+        }
+      } else {
+        setFunds([]);
+        setFundHouses([]);
+        setTotalRows(0);
+      }
+    } catch (error) {
+      console.error("Error fetching funds:", error);
+      setFunds([]);
+      setFundHouses([]);
+      setTotalRows(0);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleFundFamilyChange = (value: string) => {
+    setSelectedFundFamily(value);
+    setPage(1);
+    fetchFunds(value, 1);
+  };
 
   const handlePageChange = (page: number) => {
     setPage(page);
+    fetchFunds(selectedFundFamily, page);
   };
 
   const handlePerRowsChange = async (newPerPage: number, page: number) => {
@@ -168,17 +276,36 @@ const Funds: React.FC = () => {
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <h1 className="text-3xl font-bold tracking-tight">Mutual Funds</h1>
-          <div className="flex items-center gap-2">
-            <Label htmlFor="search" className="sr-only">
-              Search
-            </Label>
-            <Input
-              id="search"
-              placeholder="Search funds..."
-              className="max-w-xs"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          <div className="flex items-center gap-4">
+            <div className="w-[200px]">
+              <Select
+                value={selectedFundFamily}
+                onValueChange={handleFundFamilyChange}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Fund Family" />
+                </SelectTrigger>
+                <SelectContent>
+                  {fundFamilies.map((family) => (
+                    <SelectItem key={family} value={family}>
+                      {family}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center gap-2">
+              <Label htmlFor="search" className="sr-only">
+                Search
+              </Label>
+              <Input
+                id="search"
+                placeholder="Search funds..."
+                className="max-w-xs"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
           </div>
         </div>
 
