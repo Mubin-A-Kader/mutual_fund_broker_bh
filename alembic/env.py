@@ -19,7 +19,7 @@ from app.models import *  # Import all your models here
 config = context.config
 
 # Get the URL from environment variable, using aiosqlite
-database_url = os.getenv("DATABASE_URL_", "sqlite+aiosqlite:///./mutual_fund.db")
+database_url = os.getenv("SQLALCHEMY_DATABASE_URL", "sqlite+aiosqlite:///./data/mutual_fund.db")
 # Convert async URL to sync URL for Alembic
 sync_database_url = database_url.replace("sqlite+aiosqlite:", "sqlite:")
 config.set_main_option('sqlalchemy.url', sync_database_url)

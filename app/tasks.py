@@ -12,7 +12,7 @@ async def update_portfolio_values():
             result = await db.execute(select(Portfolio))
             portfolios = result.scalars().all()
             fund_data = await fetch_mutual_fund_data(is_json=False)
-            
+            print("cron job running")
             for portfolio in portfolios:
                 # Find matching fund in the API response
                 fund_info = next((fund for fund in fund_data if fund["Scheme_Name"] == portfolio.fund_name), None)

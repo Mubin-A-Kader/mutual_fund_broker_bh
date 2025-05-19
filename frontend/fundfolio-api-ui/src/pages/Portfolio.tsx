@@ -103,7 +103,15 @@ const Portfolio: React.FC = () => {
                 )}
 
                 {portfolioData.total_profit_loss !== undefined && (
-                  <p className="text-sm text-muted-foreground">
+                  <p
+                    className={`text-sm text-muted-foreground ${
+                      portfolioData.total_profit_loss > 0
+                        ? 'text-green-600'
+                        : portfolioData.total_profit_loss < 0
+                        ? 'text-red-600'
+                        : ''
+                    }`}
+                  >
                     Profit/Loss: ₹{portfolioData.total_profit_loss?.toLocaleString()}
                   </p>
                 )}

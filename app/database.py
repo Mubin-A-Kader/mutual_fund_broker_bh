@@ -3,7 +3,7 @@ from sqlalchemy.orm import declarative_base
 
 import os
 
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL_", "sqlite+aiosqlite:///./mutual_fund.db")
+SQLALCHEMY_DATABASE_URL = os.getenv("SQLALCHEMY_DATABASE_URL", "sqlite+aiosqlite:///./data/mutual_fund.db")
 
 engine = create_async_engine(
     SQLALCHEMY_DATABASE_URL,
